@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Ocellaris Anemonefish",
+    "scientific_name": "Amphiprion ocellaris",
+    "taxon_id": 132688
+  },
+  {
+    "name": "Surgeonfishes",
+    "scientific_name": "Acanthuridae",
+    "taxon_id": 47619
+  },
+  {
+    "name": "Parrotfishes",
+    "scientific_name": "Scarinae",
+    "taxon_id": 516508
+  },
+  {
+    "name": "Chrominae",
+    "scientific_name": "Chrominae",
+    "taxon_id": 1303642
+  },
+  {
+    "name": "Butterflyfishes",
+    "scientific_name": "Chaetodontidae",
+    "taxon_id": 47318
+  },
+  {
+    "name": "Angelfishes",
+    "scientific_name": "Pomacanthidae",
+    "taxon_id": 47237
+  },
+  {
+    "name": "Julidinae Wrasses",
+    "scientific_name": "Julidinae",
+    "taxon_id": 1624586
+  },
+  {
+    "name": "Blacktip Reef Shark",
+    "scientific_name": "Carcharhinus melanopterus",
+    "taxon_id": 67964
+  },
+  {
+    "name": "Gobies",
+    "scientific_name": "Gobiidae",
+    "taxon_id": 47308
+  },
+  {
+    "name": "Triggerfish",
+    "scientific_name": "Balistidae",
+    "taxon_id": 49612
+  },
+  {
+    "name": "Lionfish",
+    "scientific_name": "Pteroinae",
+    "taxon_id": 788499
+  },
+  {
+    "name": "Pufferfish",
+    "scientific_name": "Tetraodontidae",
+    "taxon_id": 49266
+  }
+]
