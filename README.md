@@ -1,4 +1,4 @@
-# BA Image Downloader
+# Dataset Scraper
 
 https://www.inaturalist.org/pages/developers
 
