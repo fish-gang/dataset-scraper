@@ -1,13 +1,10 @@
-from typing import Any
-from pyparsing import Path
+from pathlib import Path
 import requests
-import os
-import re
 import json
 import time
 
 API_URL = "https://api.inaturalist.org/v1/observations"
-DEFAULT_MAX_IMAGES = 150
+DEFAULT_MAX_IMAGES = 20
 PER_PAGE = 200
 LICENSE = "cc0"
 
@@ -16,11 +13,12 @@ JSON_PATH = BASE_DIR / "fishes.json"
 OUT_DIR = BASE_DIR / "out"
 
 
-def download_images_for_taxon(name: str, taxon_id: int):
-    out = OUT_DIR / name
+def download_images_for_taxon(family_sci_name: str, species_sci_name: str, taxon_id: int):
+    # Folder structure: out/<family_sci_name>/<species_sci_name>/
+    out = OUT_DIR / family_sci_name / species_sci_name
 
     if out.exists():
-        print(f"Skipped (already exists): {name}")
+        print(f"Skipped (already exists): {family_sci_name}/{species_sci_name}")
         return
 
     out.mkdir(parents=True, exist_ok=True)
@@ -65,19 +63,26 @@ def download_images_for_taxon(name: str, taxon_id: int):
 
                 path.write_bytes(img.content)
                 downloaded += 1
-                print(f"✔ {name}: {downloaded}")
+                print(f"✔ {family_sci_name}/{species_sci_name}: {downloaded}")
 
         page += 1
         time.sleep(0.5)
 
-    print(f"Finished with {name}: {downloaded} Images\n")
+    print(f"Finished with {family_sci_name}/{species_sci_name}: {downloaded} Images\n")
 
 
 def main():
-    fishes = json.loads(JSON_PATH.read_text(encoding="utf-8"))
-    for fish in fishes:
-        print(f"\nStart download for: {fish['name']}")
-        download_images_for_taxon(fish["name"], int(fish["taxon_id"]))
+    families = json.loads(JSON_PATH.read_text(encoding="utf-8"))
+
+    for fam in families:
+        family_sci = fam["scientific_name"]
+
+        for sp in fam.get("pinned_species", []):
+            species_sci = sp["scientific_name"]
+            taxon_id = int(sp["taxon_id"])
+
+            print(f"\nStart download for: {family_sci}/{species_sci}")
+            download_images_for_taxon(family_sci, species_sci, taxon_id)
 
 
 if __name__ == "__main__":

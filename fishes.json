@@ -1,62 +1,111 @@
 [
-  {
-    "name": "Ocellaris Anemonefish",
-    "scientific_name": "Amphiprion ocellaris",
-    "taxon_id": 132688
-  },
-  {
-    "name": "Surgeonfishes",
-    "scientific_name": "Acanthuridae",
-    "taxon_id": 47619
-  },
-  {
-    "name": "Parrotfishes",
-    "scientific_name": "Scarinae",
-    "taxon_id": 516508
-  },
-  {
-    "name": "Chrominae",
-    "scientific_name": "Chrominae",
-    "taxon_id": 1303642
-  },
-  {
-    "name": "Butterflyfishes",
-    "scientific_name": "Chaetodontidae",
-    "taxon_id": 47318
-  },
-  {
-    "name": "Angelfishes",
-    "scientific_name": "Pomacanthidae",
-    "taxon_id": 47237
-  },
-  {
-    "name": "Julidinae Wrasses",
-    "scientific_name": "Julidinae",
-    "taxon_id": 1624586
-  },
-  {
-    "name": "Blacktip Reef Shark",
-    "scientific_name": "Carcharhinus melanopterus",
-    "taxon_id": 67964
-  },
-  {
-    "name": "Gobies",
-    "scientific_name": "Gobiidae",
-    "taxon_id": 47308
-  },
-  {
-    "name": "Triggerfish",
-    "scientific_name": "Balistidae",
-    "taxon_id": 49612
-  },
-  {
-    "name": "Lionfish",
-    "scientific_name": "Pteroinae",
-    "taxon_id": 788499
-  },
-  {
-    "name": "Pufferfish",
-    "scientific_name": "Tetraodontidae",
-    "taxon_id": 49266
-  }
+    {
+        "family_name": "Surgeonfishes, Tangs, and Unicornfishes",
+        "scientific_name": "Acanthuridae",
+        "family_taxon_id": 47619,
+        "pinned_species": [
+            {
+                "common_name": "Atlantic Blue Tang",
+                "scientific_name": "Acanthurus coeruleus",
+                "taxon_id": 121196
+            },
+            {
+                "common_name": "Yellow Tang",
+                "scientific_name": "Zebrasoma flavescens",
+                "taxon_id": 52459
+            },
+            {
+                "common_name": "Bluespine Unicornfish",
+                "scientific_name": "Naso unicornis",
+                "taxon_id": 121658
+            }
+        ]
+    },
+    {
+        "family_name": "Wrasses and Parrotfishes",
+        "scientific_name": "Labridae",
+        "family_taxon_id": 49284,
+        "pinned_species": [
+            {
+                "common_name": "Blue-barred Parrotfish",
+                "scientific_name": "Scarus ghobban",
+                "taxon_id": 84175
+            },
+            {
+                "common_name": "Moon Wrasse",
+                "scientific_name": "Thalassoma lunare",
+                "taxon_id": 113980
+            }
+        ]
+    },
+    {
+        "family_name": "Damselfishes",
+        "scientific_name": "Pomacentridae",
+        "family_taxon_id": 48313,
+        "pinned_species": [
+            {
+                "common_name": "Ocellaris Anemonefish",
+                "scientific_name": "Amphiprion ocellaris",
+                "taxon_id": 132688
+            },
+            {
+                "common_name": "Blacktail Humbug",
+                "scientific_name": "Dascyllus melanurus",
+                "taxon_id": 359798
+            },
+            {
+                "common_name": "Blue-green Chromis",
+                "scientific_name": "Chromis viridis",
+                "taxon_id": 179880
+            }
+        ]
+    },
+    {
+        "family_name": "Butterflyfishes",
+        "scientific_name": "Chaetodontidae",
+        "family_taxon_id": 47318,
+        "pinned_species": []
+    },
+    {
+        "family_name": "Angelfishes",
+        "scientific_name": "Pomacanthidae",
+        "family_taxon_id": 47237,
+        "pinned_species": []
+    },
+    {
+        "family_name": "Gobies",
+        "scientific_name": "Gobiidae",
+        "family_taxon_id": 47308,
+        "pinned_species": []
+    },
+    {
+        "family_name": "Triggerfishes",
+        "scientific_name": "Balistidae",
+        "family_taxon_id": 49612,
+        "pinned_species": []
+    },
+    {
+        "family_name": "Scorpionfishes and Lionfishes",
+        "scientific_name": "Scorpaenidae",
+        "family_taxon_id": 47285,
+        "pinned_species": []
+    },
+    {
+        "family_name": "Pufferfishes",
+        "scientific_name": "Tetraodontidae",
+        "family_taxon_id": 49266,
+        "pinned_species": []
+    },
+    {
+        "family_name": "Requiem Sharks",
+        "scientific_name": "Carcharhinidae",
+        "family_taxon_id": 52301,
+        "pinned_species": [
+            {
+                "common_name": "Blacktip Reef Shark",
+                "scientific_name": "Carcharhinus melanopterus",
+                "taxon_id": 67964
+            }
+        ]
+    }
 ]
