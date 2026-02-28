@@ -13,15 +13,25 @@ JSON_PATH = BASE_DIR / "fishes.json"
 OUT_DIR = BASE_DIR / "out"
 
 
-def download_images_for_taxon(family_sci_name: str, species_sci_name: str, taxon_id: int):
+def normalize_name(name: str) -> str:
+    return name.lower().replace(" ", "_")
+
+
+def download_images_for_taxon(
+    family_sci_name: str, species_sci_name: str, taxon_id: int
+):
     # Folder structure: out/<family_sci_name>/<species_sci_name>/
-    out = OUT_DIR / family_sci_name / species_sci_name
+    family_dir = normalize_name(family_sci_name)
+    species_dir = normalize_name(species_sci_name)
+    out = OUT_DIR / family_dir / species_dir
 
     if out.exists():
-        print(f"Skipped (already exists): {family_sci_name}/{species_sci_name}")
+        print(f"Skipped (already exists): {family_dir}/{species_dir}")
         return
 
     out.mkdir(parents=True, exist_ok=True)
+
+    print(f"\nStart download for: {family_dir}/{species_dir}")
 
     page = 1
     downloaded = 0
@@ -53,7 +63,7 @@ def download_images_for_taxon(family_sci_name: str, species_sci_name: str, taxon
 
                 img_url = url.replace("square", "large")
                 ext = img_url.split(".")[-1].split("?")[0] or "jpg"
-                path = out / f"img_{downloaded:03}.{ext}"
+                path = out / f"{normalize_name(species_sci_name)}_{downloaded:03}.{ext}"
 
                 try:
                     img = requests.get(img_url, timeout=15)
@@ -63,12 +73,12 @@ def download_images_for_taxon(family_sci_name: str, species_sci_name: str, taxon
 
                 path.write_bytes(img.content)
                 downloaded += 1
-                print(f"✔ {family_sci_name}/{species_sci_name}: {downloaded}")
+                print(f"✔ {family_dir}/{species_dir}: {downloaded}")
 
         page += 1
         time.sleep(0.5)
 
-    print(f"Finished with {family_sci_name}/{species_sci_name}: {downloaded} Images\n")
+    print(f"Finished with {family_dir}/{species_dir}: {downloaded} Images\n")
 
 
 def main():
@@ -77,11 +87,9 @@ def main():
     for fam in families:
         family_sci = fam["scientific_name"]
 
-        for sp in fam.get("pinned_species", []):
-            species_sci = sp["scientific_name"]
-            taxon_id = int(sp["taxon_id"])
-
-            print(f"\nStart download for: {family_sci}/{species_sci}")
+        for species in fam.get("pinned_species", []):
+            species_sci = species["scientific_name"]
+            taxon_id = int(species["taxon_id"])
             download_images_for_taxon(family_sci, species_sci, taxon_id)
 
 
