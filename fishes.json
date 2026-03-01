@@ -10,11 +10,6 @@
                 "taxon_id": 121196
             },
             {
-                "common_name": "Yellow Tang",
-                "scientific_name": "Zebrasoma flavescens",
-                "taxon_id": 52459
-            },
-            {
                 "common_name": "Bluespine Unicornfish",
                 "scientific_name": "Naso unicornis",
                 "taxon_id": 121658
@@ -52,11 +47,6 @@
                 "common_name": "Blacktail Humbug",
                 "scientific_name": "Dascyllus melanurus",
                 "taxon_id": 359798
-            },
-            {
-                "common_name": "Blue-green Chromis",
-                "scientific_name": "Chromis viridis",
-                "taxon_id": 179880
             }
         ]
     },
@@ -64,37 +54,61 @@
         "family_name": "Butterflyfishes",
         "scientific_name": "Chaetodontidae",
         "family_taxon_id": 47318,
-        "pinned_species": []
+        "pinned_species": [
+            {
+                "common_name": "Raccoon Butterflyfish",
+                "scientific_name": "Chaetodon lunula",
+                "taxon_id": 47316
+            }
+        ]
     },
     {
         "family_name": "Angelfishes",
         "scientific_name": "Pomacanthidae",
         "family_taxon_id": 47237,
-        "pinned_species": []
-    },
-    {
-        "family_name": "Gobies",
-        "scientific_name": "Gobiidae",
-        "family_taxon_id": 47308,
-        "pinned_species": []
+        "pinned_species": [
+            {
+                "common_name": "Emperor Angelfish",
+                "scientific_name": "Pomacanthus imperator",
+                "taxon_id": 84181
+            }
+        ]
     },
     {
         "family_name": "Triggerfishes",
         "scientific_name": "Balistidae",
         "family_taxon_id": 49612,
-        "pinned_species": []
+        "pinned_species": [
+            {
+                "common_name": "Lagoon Triggerfish",
+                "scientific_name": "Rhinecanthus aculeatus",
+                "taxon_id": 83884
+            }
+        ]
     },
     {
         "family_name": "Scorpionfishes and Lionfishes",
         "scientific_name": "Scorpaenidae",
         "family_taxon_id": 47285,
-        "pinned_species": []
+        "pinned_species": [
+            {
+                "common_name": "Red Lionfish",
+                "scientific_name": "Pterois volitans",
+                "taxon_id": 47280
+            }
+        ]
     },
     {
         "family_name": "Pufferfishes",
         "scientific_name": "Tetraodontidae",
         "family_taxon_id": 49266,
-        "pinned_species": []
+        "pinned_species": [
+            {
+                "common_name": "Guineafowl Puffer",
+                "scientific_name": "Arothron meleagris",
+                "taxon_id": 83318
+            }
+        ]
     },
     {
         "family_name": "Requiem Sharks",
