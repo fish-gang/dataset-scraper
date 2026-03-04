@@ -2,8 +2,8 @@ import logging
 
 from src.inat_download import run as inat_run
 
-# log_level = logging.INFO
-log_level = logging.DEBUG
+log_level = logging.INFO
+# log_level = logging.DEBUG
 
 
 def main():

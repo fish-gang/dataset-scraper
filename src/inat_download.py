@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 API_URL = "https://api.inaturalist.org/v1/observations"
 DEFAULT_MAX_IMAGES = 500
-PER_PAGE = 200 # Maximum is 200
+PER_PAGE = 200  # Maximum is 200
 ALLOWED_LICENSES = {"cc0", "cc-by"}
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,15 +24,15 @@ def normalize_name(name: str) -> str:
 
 
 def download_images_for_taxon(
-    family_sci_name: str, species_sci_name: str, taxon_id: int, dataset: Dataset
+    family_scientific_name: str, species_scientific_name: str, species_taxon_id: int, dataset: Dataset
 ):
-    # Folder structure: out/<family_sci_name>/<species_sci_name>/
-    family_dir = normalize_name(family_sci_name)
-    species_dir = normalize_name(species_sci_name)
+    # Folder structure: out/<family_scientific_name>/<species_scientific_name>/
+    family_dir = normalize_name(family_scientific_name)
+    species_dir = normalize_name(species_scientific_name)
     out = OUT_DIR / family_dir / species_dir
     out.mkdir(parents=True, exist_ok=True)
 
-    already_downloaded = dataset.count_by_taxon(taxon_id)
+    already_downloaded = dataset.count_by_taxon(species_taxon_id)
     if already_downloaded >= DEFAULT_MAX_IMAGES:
         logger.warning(
             f"Skipped (already complete): {family_dir}/{species_dir} ({already_downloaded} images)"
@@ -48,7 +48,7 @@ def download_images_for_taxon(
 
     while downloaded < DEFAULT_MAX_IMAGES:
         params = {
-            "taxon_id": taxon_id,
+            "taxon_id": species_taxon_id,
             "quality_grade": "research",
             "photos": "true",
             "license": ",".join(ALLOWED_LICENSES),
@@ -86,7 +86,7 @@ def download_images_for_taxon(
                 img_url = url.replace("square", "original")
                 logger.debug(f"Downloading image: {img_url}")
                 ext = img_url.split(".")[-1].split("?")[0] or "jpg"
-                path = out / f"{normalize_name(species_sci_name)}_{downloaded:03}.{ext}"
+                path = out / f"{normalize_name(species_scientific_name)}_{downloaded:03}.{ext}"
 
                 try:
                     img = requests.get(img_url, timeout=15)
@@ -96,7 +96,7 @@ def download_images_for_taxon(
                     continue
 
                 path.write_bytes(img.content)
-                dataset.add(obs, photo, family_sci_name, species_sci_name, path)
+                dataset.add(obs, photo, path)
                 dataset.save()
 
                 downloaded += 1
@@ -111,11 +111,14 @@ def download_images_for_taxon(
 def run():
     families = json.loads(JSON_PATH.read_text(encoding="utf-8"))
     dataset = Dataset.load()
+    dataset.set_labels(families)
 
     for fam in families:
-        family_sci = fam["scientific_name"]
+        family_sci_name = fam["family_scientific_name"]
 
         for species in fam.get("pinned_species", []):
-            species_sci = species["scientific_name"]
-            taxon_id = int(species["taxon_id"])
-            download_images_for_taxon(family_sci, species_sci, taxon_id, dataset)
+            species_sci_name = species["species_scientific_name"]
+            species_taxon_id = int(species["species_taxon_id"])
+            download_images_for_taxon(
+                family_sci_name, species_sci_name, species_taxon_id, dataset
+            )
