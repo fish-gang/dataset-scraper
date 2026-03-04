@@ -10,7 +10,7 @@ from src.http import get
 logger = logging.getLogger(__name__)
 
 API_URL = "https://api.inaturalist.org/v1/observations"
-DEFAULT_MAX_IMAGES = 200
+DEFAULT_MAX_IMAGES = 250
 PER_PAGE = 200
 LICENSE = "cc0,cc-by"
 

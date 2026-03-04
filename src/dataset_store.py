@@ -4,7 +4,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-DATASET_PATH = Path(__file__).resolve().parent.parent / "dataset.json"
+OUT_DIR = Path(__file__).resolve().parent.parent / "out"
+DATASET_PATH = OUT_DIR / "dataset.json"
 
 
 class Dataset:
@@ -58,7 +59,6 @@ class Dataset:
             "taxon_id": taxon.get("id"),
             "observation_id": obs.get("id"),
             "observation_uri": obs.get("uri"),
-            "quality_grade": obs.get("quality_grade"),
             "photo_id": photo.get("id"),
             "photo_url_original": photo.get("url", "").replace("square", "original"),
             "photo_license": photo.get("license_code"),

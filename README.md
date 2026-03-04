@@ -75,3 +75,9 @@ See observations for a specific species (taxon id): https://www.inaturalist.org/
 API endpoint for observation photos: https://api.inaturalist.org/v1/observations
 
 API endpoint for taxon information: https://api.inaturalist.org/v1/taxa?id=179880
+
+## Licensing and Credits
+
+Images in this dataset are either [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) (attribution required) or CC0 no attribution required.
+
+See CREDITS.md for the attribution of CC-BY 4.0 licensed images.
