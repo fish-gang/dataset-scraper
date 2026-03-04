@@ -1,5 +1,4 @@
 import logging
-import os
 
 from src.inat_download import run as inat_run
 

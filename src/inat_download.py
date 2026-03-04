@@ -4,12 +4,15 @@ import json
 import time
 import logging
 
+from src.dataset_store import Dataset
+from src.http import get
+
 logger = logging.getLogger(__name__)
 
 API_URL = "https://api.inaturalist.org/v1/observations"
 DEFAULT_MAX_IMAGES = 200
 PER_PAGE = 200
-LICENSE = "cc0"
+LICENSE = "cc0,cc-by"
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 JSON_PATH = BASE_DIR / "fishes.json"
@@ -21,7 +24,7 @@ def normalize_name(name: str) -> str:
 
 
 def download_images_for_taxon(
-    family_sci_name: str, species_sci_name: str, taxon_id: int
+    family_sci_name: str, species_sci_name: str, taxon_id: int, dataset: Dataset
 ):
     # Folder structure: out/<family_sci_name>/<species_sci_name>/
     family_dir = normalize_name(family_sci_name)
@@ -43,15 +46,12 @@ def download_images_for_taxon(
             "taxon_id": taxon_id,
             "quality_grade": "research",
             "photos": "true",
-            "license": LICENSE,
+            "photo_license": LICENSE,
             "per_page": PER_PAGE,
             "page": page,
         }
 
-        r = requests.get(API_URL, params=params, timeout=15)
-        r.raise_for_status()
-        logger.debug(f"Request URL: {r.url} - Status: {r.status_code}")
-        logger.debug(f"Response: {json.dumps(r.json(), indent=2)}")
+        r = get(API_URL, params=params)
         results = r.json().get("results", [])
 
         if not results:
@@ -79,6 +79,9 @@ def download_images_for_taxon(
                     continue
 
                 path.write_bytes(img.content)
+                dataset.add(obs, photo, family_sci_name, species_sci_name, path)
+                dataset.save()
+
                 downloaded += 1
                 logger.info(f"✔ {family_dir}/{species_dir}: {downloaded}")
 
@@ -90,6 +93,7 @@ def download_images_for_taxon(
 
 def run():
     families = json.loads(JSON_PATH.read_text(encoding="utf-8"))
+    dataset = Dataset.load()
 
     for fam in families:
         family_sci = fam["scientific_name"]
@@ -97,4 +101,4 @@ def run():
         for species in fam.get("pinned_species", []):
             species_sci = species["scientific_name"]
             taxon_id = int(species["taxon_id"])
-            download_images_for_taxon(family_sci, species_sci, taxon_id)
+            download_images_for_taxon(family_sci, species_sci, taxon_id, dataset)
