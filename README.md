@@ -2,6 +2,8 @@
 
 https://www.inaturalist.org/pages/developers
 
+`observations` endpoint documentation: https://api.inaturalist.org/v1/docs/#!/Observations/get_observations
+
 ## JSON File
 
 Family -> Species

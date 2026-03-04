@@ -10,9 +10,9 @@ from src.http import get
 logger = logging.getLogger(__name__)
 
 API_URL = "https://api.inaturalist.org/v1/observations"
-DEFAULT_MAX_IMAGES = 250
-PER_PAGE = 200
-LICENSE = "cc0,cc-by"
+DEFAULT_MAX_IMAGES = 500
+PER_PAGE = 200 # Maximum is 200
+ALLOWED_LICENSES = {"cc0", "cc-by"}
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 JSON_PATH = BASE_DIR / "fishes.json"
@@ -30,23 +30,28 @@ def download_images_for_taxon(
     family_dir = normalize_name(family_sci_name)
     species_dir = normalize_name(species_sci_name)
     out = OUT_DIR / family_dir / species_dir
+    out.mkdir(parents=True, exist_ok=True)
 
-    if out.exists():
-        logger.warning(f"Skipped (already exists): {family_dir}/{species_dir}")
+    already_downloaded = dataset.count_by_taxon(taxon_id)
+    if already_downloaded >= DEFAULT_MAX_IMAGES:
+        logger.warning(
+            f"Skipped (already complete): {family_dir}/{species_dir} ({already_downloaded} images)"
+        )
         return
 
-    out.mkdir(parents=True, exist_ok=True)
-    logger.info(f"Start download for: {family_dir}/{species_dir}")
+    logger.info(
+        f"Start download for: {family_dir}/{species_dir} (already have {already_downloaded})"
+    )
 
     page = 1
-    downloaded = 0
+    downloaded = already_downloaded
 
     while downloaded < DEFAULT_MAX_IMAGES:
         params = {
             "taxon_id": taxon_id,
             "quality_grade": "research",
             "photos": "true",
-            "photo_license": LICENSE,
+            "license": ",".join(ALLOWED_LICENSES),
             "per_page": PER_PAGE,
             "page": page,
         }
@@ -62,11 +67,23 @@ def download_images_for_taxon(
                 if downloaded >= DEFAULT_MAX_IMAGES:
                     break
 
+                # Check photo-level license
+                photo_license = photo.get("license_code", "")
+                if photo_license not in ALLOWED_LICENSES:
+                    logger.debug(f"Skipped photo with license: {photo_license}")
+                    continue
+
+                # Check that photo has not already been downloaded
+                photo_id = photo.get("id")
+                if not photo_id or dataset.has_photo(photo_id):
+                    logger.debug(f"Skipped duplicate photo: {photo_id}")
+                    continue
+
                 url = photo.get("url")
                 if not url:
                     continue
 
-                img_url = url.replace("square", "large")
+                img_url = url.replace("square", "original")
                 logger.debug(f"Downloading image: {img_url}")
                 ext = img_url.split(".")[-1].split("?")[0] or "jpg"
                 path = out / f"{normalize_name(species_sci_name)}_{downloaded:03}.{ext}"

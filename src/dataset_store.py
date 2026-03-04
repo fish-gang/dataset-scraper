@@ -12,12 +12,14 @@ class Dataset:
     def __init__(self, path: Path = DATASET_PATH):
         self.path = path
         self.records: list[dict] = []
+        self._photo_ids: set[int] = set()
 
     @classmethod
     def load(cls, path: Path = DATASET_PATH) -> "Dataset":
         ds = cls(path)
         if path.exists():
             ds.records = json.loads(path.read_text(encoding="utf-8"))
+            ds._photo_ids = {r["photo_id"] for r in ds.records}
             logger.debug(f"Loaded {len(ds.records)} records from {path}")
         return ds
 
@@ -35,11 +37,17 @@ class Dataset:
         species_sci_name: str,
         local_path: Path,
     ) -> None:
-        self.records.append(
-            self._build_record(
-                obs, photo, family_sci_name, species_sci_name, local_path
-            )
+        record = self._build_record(
+            obs, photo, family_sci_name, species_sci_name, local_path
         )
+        self.records.append(record)
+        self._photo_ids.add(record["photo_id"])
+
+    def has_photo(self, photo_id: int) -> bool:
+        return photo_id in self._photo_ids
+
+    def count_by_taxon(self, taxon_id: int) -> int:
+        return sum(1 for r in self.records if r["taxon_id"] == taxon_id)
 
     def _build_record(
         self,
