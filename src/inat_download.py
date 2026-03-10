@@ -16,7 +16,7 @@ ALLOWED_LICENSES = {"cc0", "cc-by"}
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 JSON_PATH = BASE_DIR / "fishes.json"
-OUT_DIR = BASE_DIR / "out"
+OUT_DIR = BASE_DIR / "out" / "data"
 
 
 def normalize_name(name: str) -> str:
@@ -26,7 +26,7 @@ def normalize_name(name: str) -> str:
 def download_images_for_taxon(
     family_scientific_name: str, species_scientific_name: str, species_taxon_id: int, dataset: Dataset
 ):
-    # Folder structure: out/<family_scientific_name>/<species_scientific_name>/
+    # Folder structure: out/data/<family_scientific_name>/<species_scientific_name>/
     family_dir = normalize_name(family_scientific_name)
     species_dir = normalize_name(species_scientific_name)
     out = OUT_DIR / family_dir / species_dir

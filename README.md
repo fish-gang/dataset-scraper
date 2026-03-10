@@ -31,7 +31,7 @@ graph TD
     LAB --> LAB2["Moon Wrasse<br>Thalassoma lunare"]
 
     POM --> POM1["Ocellaris Anemonefish<br>Amphiprion ocellaris"]
-    POM --> POM2["Blacktail Humbug<br>Dascyllus melanurus"]
+    POM --> POM2["Blue-green Chromis<br>Chromis viridis"]
 
     CHA --> CHA1["Raccoon Butterflyfish<br>Chaetodon lunula"]
 
