@@ -4,6 +4,8 @@ https://www.inaturalist.org/pages/developers
 
 `observations` endpoint documentation: https://api.inaturalist.org/v1/docs/#!/Observations/get_observations
 
+HuggingFace Dataset Repository: https://huggingface.co/datasets/fish-gang/deepscan-dataset
+
 ## JSON File
 
 Family -> Species
@@ -83,3 +85,4 @@ API endpoint for taxon information: https://api.inaturalist.org/v1/taxa?id=17988
 Images in this dataset are either [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) (attribution required) or CC0 no attribution required.
 
 See CREDITS.md for the attribution of CC-BY 4.0 licensed images.
+
