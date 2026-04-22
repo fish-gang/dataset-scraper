@@ -26,11 +26,11 @@ def main() -> None:
     logger.info("=== Step 1/3: Pinned species ===")
     pinned_species.run(dataset, families)
 
-    # logger.info("=== Step 2/3: Unknown fish ===")
-    # unknown_fish.run(dataset, families)
+    logger.info("=== Step 2/3: Unknown fish ===")
+    unknown_fish.run(dataset, families)
 
-    # logger.info("=== Step 3/3: No fish ===")
-    # no_fish.run(dataset)
+    logger.info("=== Step 3/3: No fish ===")
+    no_fish.run(dataset)
 
     logger.info("=== All done ===")
     logger.info(f"Pinned species images : {len(dataset.records)}")

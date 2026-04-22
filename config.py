@@ -17,7 +17,7 @@ INAT_ALLOWED_LICENSES = {"cc0", "cc-by"}
 INAT_FISH_GROUPS = ("Actinopterygii", "Chondrichthyes")
 
 # Download limits
-PINNED_SPECIES_LIMIT = 10
+PINNED_SPECIES_LIMIT = 15
 UNKNOWN_FISH_LIMIT = 10
 NO_FISH_LIMIT_PER_CLASS = 50
 # HTTP
@@ -26,16 +26,31 @@ MAX_RETRIES = 4
 
 # No-fish labels (Open Images)
 NO_FISH_LABELS = [
+    # Urban / everyday
     "Chair",
     "Car",
     "Table",
     "Person",
     "Dog",
     "Cat",
-    "Boat",
-    "Tree",
     "Bicycle",
     "Bus",
     "Truck",
+    "Motorcycle",
+    "Airplane",
+    "Boat",
     "House",
+    "Bottle",
+    # Underwater / coastal
+    "Sea turtle",
+    "Tortoise",
+    "Starfish",
+    "Jellyfish",
+    "Crab",
+    "Lobster",
+    "Dolphin",
+    "Whale",
+    # Natural
+    "Mushroom",
+    "Tree",
 ]

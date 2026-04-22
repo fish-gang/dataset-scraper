@@ -1,6 +1,6 @@
-from pathlib import Path
 import json
 import logging
+from pathlib import Path
 
 from config import DATASET_PATH
 
@@ -8,6 +8,9 @@ logger = logging.getLogger(__name__)
 
 NEGATIVE_LABEL_NO_FISH = "no_fish"
 NEGATIVE_LABEL_UNKNOWN_FISH = "unknown_fish"
+
+SOURCE_INATURALIST = "inaturalist"
+SOURCE_OPENIMAGES = "openimages"
 
 
 class Dataset:
@@ -29,7 +32,10 @@ class Dataset:
             ds._labels = raw.get("labels", [])
             ds._photo_ids = {r["photo_id"] for r in ds.records if r.get("photo_id")}
             ds._negative_photo_ids = {
-                r["photo_id"] for r in ds.negative_records if r.get("photo_id")
+                r["meta"]["photo_id"]
+                for r in ds.negative_records
+                if r.get("source") == SOURCE_INATURALIST
+                and r.get("meta", {}).get("photo_id")
             }
             logger.debug(
                 f"Loaded {len(ds.records)} records and "
@@ -104,15 +110,39 @@ class Dataset:
 
     # ── Negative data ─────────────────────────────────────────────────────────
 
-    def add_negative(self, label_id: str, local_path: Path, **meta) -> None:
+    def add_negative_inat(self, local_path: Path, obs: dict, photo: dict) -> None:
+        taxon = obs.get("taxon") or {}
         record = {
-            "label_id": label_id,
+            "label_id": NEGATIVE_LABEL_UNKNOWN_FISH,
             "file": str(local_path.relative_to(self.path.parent)),
-            **meta,
+            "source": SOURCE_INATURALIST,
+            "meta": {
+                "photo_id": photo.get("id"),
+                "observation_id": obs.get("id"),
+                "observation_uri": obs.get("uri"),
+                "photo_url_original": photo.get("url", "").replace(
+                    "square", "original"
+                ),
+                "photo_license": photo.get("license_code"),
+                "photo_attribution": photo.get("attribution"),
+                "taxon_id": taxon.get("id"),
+                "taxon_scientific_name": taxon.get("name"),
+            },
         }
         self.negative_records.append(record)
-        if photo_id := meta.get("photo_id"):
+        if photo_id := photo.get("id"):
             self._negative_photo_ids.add(photo_id)
+
+    def add_negative_openimages(self, local_path: Path, original_label: str) -> None:
+        record = {
+            "label_id": NEGATIVE_LABEL_NO_FISH,
+            "file": str(local_path.relative_to(self.path.parent)),
+            "source": SOURCE_OPENIMAGES,
+            "meta": {
+                "original_label": original_label,
+            },
+        }
+        self.negative_records.append(record)
 
     def has_negative_photo(self, photo_id: int) -> bool:
         return photo_id in self._negative_photo_ids
