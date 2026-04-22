@@ -31,7 +31,10 @@ EXTRA_ARGS = []
 # HILFSFUNKTIONEN
 # =========================
 
-def get_unique_target_path(base_dir: Path, stem: str, suffix: str, start_index: int) -> Path:
+
+def get_unique_target_path(
+    base_dir: Path, stem: str, suffix: str, start_index: int
+) -> Path:
     index = start_index
     while True:
         candidate = base_dir / f"{stem}{index}{suffix}"
@@ -82,6 +85,7 @@ def flatten_downloaded_images(base_dir: Path):
 # HAUPTPROGRAMM
 # =========================
 
+
 def main():
     output_path = Path(OUTPUT_DIR)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -96,8 +100,10 @@ def main():
 
     cmd = [
         command_path,
-        "--base_dir", str(output_path),
-        "--limit", str(LIMIT_PER_CLASS),
+        "--base_dir",
+        str(output_path),
+        "--limit",
+        str(LIMIT_PER_CLASS),
         "--labels",
         *LABELS,
         *EXTRA_ARGS,
@@ -114,7 +120,9 @@ def main():
         print("Alle Bilder liegen jetzt direkt im Test-Ordner.")
     except subprocess.CalledProcessError as e:
         print(f"Fehler beim Download. Rückgabecode: {e.returncode}")
-        print("Wahrscheinlich ist mindestens ein Label im Open-Images-Katalog nicht exakt vorhanden.")
+        print(
+            "Wahrscheinlich ist mindestens ein Label im Open-Images-Katalog nicht exakt vorhanden."
+        )
         print("Verwende vorerst nur diese getesteten Labels:")
         print(", ".join(LABELS))
 

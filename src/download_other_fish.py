@@ -51,7 +51,7 @@ METADATA_FILENAME = "metadata.csv"
 REQUEST_TIMEOUT = 30
 MAX_RETRIES = 4
 PER_PAGE = 200
-ALLOWED_LICENSES = ("cc0", "cc-by", "cc-by-sa")
+ALLOWED_LICENSES = ("cc0", "cc-by")
 GROUP_NAMES = ("Actinopterygii", "Chondrichthyes")
 TARGET_FILENAME_PREFIX = "other_fish_"
 REQUEST_PAUSE_SECONDS = 0.6
@@ -117,9 +117,7 @@ def request_json(
         except requests.RequestException as exc:
             last_error = exc
             wait_seconds = min(2 ** (attempt - 1), 8)
-            print(
-                f"Netzwerkfehler bei {url} (Versuch {attempt}/{MAX_RETRIES}): {exc}"
-            )
+            print(f"Netzwerkfehler bei {url} (Versuch {attempt}/{MAX_RETRIES}): {exc}")
             if attempt < MAX_RETRIES:
                 time.sleep(wait_seconds)
 
@@ -134,7 +132,9 @@ def fetch_taxon(session: requests.Session, taxon_id: int) -> dict:
     return results[0]
 
 
-def resolve_taxon_id_by_name(session: requests.Session, scientific_name: str) -> int | None:
+def resolve_taxon_id_by_name(
+    session: requests.Session, scientific_name: str
+) -> int | None:
     payload = request_json(
         session,
         f"{API_TAXA_URL}/autocomplete",
@@ -159,7 +159,9 @@ def resolve_fish_group_taxa(
         try:
             family_taxon = fetch_taxon(session, family_taxon_id)
         except RuntimeError as exc:
-            print(f"Warnung: Konnte Familien-Taxon {family_taxon_id} nicht laden: {exc}")
+            print(
+                f"Warnung: Konnte Familien-Taxon {family_taxon_id} nicht laden: {exc}"
+            )
             continue
 
         lineage = family_taxon.get("ancestors", [])
@@ -181,14 +183,15 @@ def resolve_fish_group_taxa(
     missing = [name for name in GROUP_NAMES if name not in resolved]
     if missing:
         raise RuntimeError(
-            "Konnte die Fisch-Gruppen nicht vollständig auflösen: "
-            + ", ".join(missing)
+            "Konnte die Fisch-Gruppen nicht vollständig auflösen: " + ", ".join(missing)
         )
 
     return [resolved[name] for name in GROUP_NAMES]
 
 
-def load_existing_metadata(metadata_path: Path) -> tuple[list[dict[str, str]], set[int], set[str]]:
+def load_existing_metadata(
+    metadata_path: Path,
+) -> tuple[list[dict[str, str]], set[int], set[str]]:
     if not metadata_path.exists():
         return [], set(), set()
 
@@ -254,7 +257,9 @@ def build_unique_output_path(
         candidate_number += 1
 
 
-def observation_matches_excluded_taxa(observation: dict, excluded_taxa: set[int]) -> bool:
+def observation_matches_excluded_taxa(
+    observation: dict, excluded_taxa: set[int]
+) -> bool:
     taxon = observation.get("taxon") or {}
     taxon_id = taxon.get("id")
     try:
@@ -296,7 +301,9 @@ def fetch_candidate_observations(
 
             params = {
                 "taxon_id": fish_taxon_id,
-                "without_taxon_id": ",".join(str(taxon_id) for taxon_id in sorted(excluded_taxa)),
+                "without_taxon_id": ",".join(
+                    str(taxon_id) for taxon_id in sorted(excluded_taxa)
+                ),
                 "quality_grade": "research",
                 "photos": "true",
                 "license": ",".join(ALLOWED_LICENSES),
@@ -309,7 +316,9 @@ def fetch_candidate_observations(
             try:
                 payload = request_json(session, API_OBSERVATIONS_URL, params=params)
             except RuntimeError as exc:
-                print(f"Warnung: Kandidatenseite für Taxon {fish_taxon_id} übersprungen: {exc}")
+                print(
+                    f"Warnung: Kandidatenseite für Taxon {fish_taxon_id} übersprungen: {exc}"
+                )
                 pages[fish_taxon_id] += 1
                 continue
 
@@ -372,7 +381,9 @@ def download_image(
 
     for attempt in range(1, MAX_RETRIES + 1):
         try:
-            with session.get(image_url, stream=True, timeout=REQUEST_TIMEOUT) as response:
+            with session.get(
+                image_url, stream=True, timeout=REQUEST_TIMEOUT
+            ) as response:
                 response.raise_for_status()
                 target_path.parent.mkdir(parents=True, exist_ok=True)
                 with target_path.open("wb") as handle:
@@ -394,7 +405,9 @@ def download_image(
     return False
 
 
-def build_metadata_row(filename: str, observation: dict, photo: dict, image_url: str) -> dict[str, str]:
+def build_metadata_row(
+    filename: str, observation: dict, photo: dict, image_url: str
+) -> dict[str, str]:
     taxon = observation.get("taxon") or {}
     return {
         "filename": filename,
@@ -436,7 +449,9 @@ def main() -> None:
     excluded_taxa = load_excluded_taxa(JSON_PATH)
     family_taxa = load_family_taxa(JSON_PATH)
     metadata_path = output_dir / METADATA_FILENAME
-    existing_rows, existing_photo_ids, existing_filenames = load_existing_metadata(metadata_path)
+    existing_rows, existing_photo_ids, existing_filenames = load_existing_metadata(
+        metadata_path
+    )
     next_sequence_number = get_next_sequence_number(existing_filenames)
 
     print(f"Ausgeschlossene Zielarten: {len(excluded_taxa)} Taxa")
@@ -494,7 +509,9 @@ def main() -> None:
                 if not success:
                     continue
 
-                metadata_row = build_metadata_row(target_path.name, observation, photo, image_url)
+                metadata_row = build_metadata_row(
+                    target_path.name, observation, photo, image_url
+                )
                 rows.append(metadata_row)
                 save_metadata(metadata_path, rows)
 

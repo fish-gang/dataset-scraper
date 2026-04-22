@@ -5,6 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "certifi>=2026.4.22",
+    "openimages",
     "pyrate-limiter>=4.0.2",
     "requests>=2.32.5",
     "ruff>=0.15.4",
